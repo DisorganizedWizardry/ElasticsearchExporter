@@ -1,0 +1,15 @@
+{
+    "bool": {
+      "filter": [
+        {
+          "range": {
+            "@timestamp": {
+              "format": "strict_date_optional_time",
+              "gte": "2023-07-10T04:00:00.000Z",
+              "lte": "2023-07-10T07:00:00.000Z"
+            }
+          }
+	}
+      ]
+    }
+}
