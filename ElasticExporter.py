@@ -284,7 +284,7 @@ def ExportIndex(es, settings, TimeSeries, ExcludeField = False, AllItems = True,
         ProcessGroup(es, settings['index_name'], settings, group )
   
   #again for results with no group
-  group = 'No Group'
+  group = settings['FileNameOther']
   file_ndjson = settings['fullpath'] + '/' + group + '.ndjson'
   file_sha = settings['fullpath'] + '/' + group + '.checksums'
   if not os.path.exists( file_sha ):
