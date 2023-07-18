@@ -1,6 +1,6 @@
 # ElasticsearchExporter
 
-ElasticsearchExporter can export all events in a single elasticsearch index to a newline-delimited json file. This script uses a PIT search and search_after API. It will export 10,000 events at a time and keep going until all events have been exported. It is possible to export millions of events from a single elasticsearch index.
+ElasticsearchExporter can export all events in a single elasticsearch index to a newline-delimited json file. This script uses the elasticsearch python API to perform a PIT and search_after API. It will export 10,000 events at a time and keep going until all events have been exported. It is possible to export millions of events from a single elasticsearch index.
 
 # Download 
 
