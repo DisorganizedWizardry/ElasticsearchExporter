@@ -9,6 +9,7 @@ ElasticsearchExporter can export all events in a single elasticsearch index to a
 # Install python requirements
 
 > cd ElasticsearchExporter/
+> 
 > pip3 install -r requirements.txt
 
 # Configure local cluster settings 
