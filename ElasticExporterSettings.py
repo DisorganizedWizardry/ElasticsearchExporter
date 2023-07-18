@@ -3,7 +3,7 @@ from elasticsearch import Elasticsearch
 def LoadSettings():
 
   #command to get the SHA-256 fingerprint from the elasticsearch server
-  #echo -n | openssl s_client --connect 192.168.1.1:9200 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | openssl x509 -noout -in - --fingerprint -sha256
+  #openssl s_client --connect 192.168.1.1:9200 </dev/null | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | openssl x509 -noout -in - --fingerprint -sha256
 
   CERT_FINGERPRINT="00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00"
 
@@ -16,6 +16,9 @@ def LoadSettings():
 
   settings['TimeSeries'] = True
   settings['timestamp'] = '@timestamp'
+  
+  #The filename used when no group is defined 
+  settings['FileNameOther'] = 'Other'
 
   #enable debug logging
   settings['debug'] = False
