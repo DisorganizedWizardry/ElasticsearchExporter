@@ -2,13 +2,11 @@
 Download an elasticsearch index to ndjson using a PIT search
 
 Usage:
-  ElasticExportCLI.py --index=<indexname> --backup-folder=<backup_folder> [--query-filter=<query-filter>]
+  ElasticExportCLI.py --index=<indexname> --backup-folder=<backup_folder> [--query-file=<query-file>]
 """
 
 from elasticsearch import Elasticsearch
-from datetime import datetime, timedelta
-import os, sys, json
-import traceback
+import json
 from docopt import docopt
 
 #library for ElasticExporter
@@ -35,8 +33,8 @@ def main():
   else:
     settings['NoGroup'] = False
 
-  if options['--query-filter']:
-    with open (options['--query-filter'], 'rb') as f:
+  if options['--query-file']:
+    with open (options['--query-file'], 'rb') as f:
       settings['query_filter'] = json.load(f)
     if settings['debug']:
       print ("Loaded Filter : %s" % settings['query_filter'])
