@@ -2,7 +2,7 @@
 Download an elasticsearch index to ndjson using a PIT search
 
 Usage:
-  ElasticExportCLI.py --index=<indexname> --backup-folder=<backup_folder> [--query-filter=<query-filter>] [--no_group]
+  ElasticExportCLI.py --index=<indexname> --backup-folder=<backup_folder> [--query-filter=<query-filter>]
 """
 
 from elasticsearch import Elasticsearch
