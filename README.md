@@ -34,6 +34,12 @@ These are the configuration items that need to be updated:
 
 This script uses the elasticsearch python API and the full configuration guide can be found [here](https://www.elastic.co/guide/en/elasticsearch/client/python-api/current/connecting.html)
 
+# Example
+
+This command would then export the index *filebeat-8.8.2* to the folder *exported*
+
+> python3 ElasticExporterCLI.py --index=filebeat-8.8.2 --backup-folder=exported
+
 # Documentation
 
 * [Medium guide - How to Export an Entire elasticsearch Index to a File](https://medium.com/@disorganizedwizardry/how-to-export-an-entire-elasticsearch-index-to-a-file-37667a8803a0)
