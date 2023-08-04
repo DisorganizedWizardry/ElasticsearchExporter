@@ -28,10 +28,12 @@ def main():
   if options['--index']:
     settings['index_name'] = options['--index']
 
-  if options['--no_group']:
-    settings['NoGroup'] = True
-  else:
-    settings['NoGroup'] = False
+  #if options['--no_group']:
+  #  settings['NoGroup'] = True
+  #else:
+  #  settings['NoGroup'] = False
+  #set default setting until this feature is added
+  settings['NoGroup'] = False
 
   if options['--query-file']:
     with open (options['--query-file'], 'rb') as f:
