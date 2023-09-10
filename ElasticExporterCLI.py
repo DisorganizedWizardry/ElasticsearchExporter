@@ -19,13 +19,13 @@ def main():
   #Load local config
   settings = ElasticExporterSettings.LoadSettings()
 
-  if settings['debug']:
+  if settings.get('debug'):
     print ("Loaded settings : %s" % settings)
 
 
   options = docopt(__doc__)
 
-  if options['--index']:
+  if options.get('--index'):
     settings['index_name'] = options['--index']
 
   #if options['--no_group']:
@@ -35,21 +35,21 @@ def main():
   #set default setting until this feature is added
   settings['NoGroup'] = False
 
-  if options['--query-file']:
+  if options.get('--query-file'):
     with open (options['--query-file'], 'rb') as f:
       settings['query_filter'] = json.load(f)
-    if settings['debug']:
+    if settings.get('debug'):
       print ("Loaded Filter : %s" % settings['query_filter'])
   else:
     #Default filter match_all
     settings['query_filter'] = { "bool": { "filter": [ { "match_all": {} } ], } }
 
   #folder to save exported ndjson files
-  if options['--backup-folder']:
+  if options.get('--backup-folder'):
     settings['backup_folder'] = options['--backup-folder']
 
 
-  if settings['debug']:
+  if settings.get('debug'):
     print (settings)
 
   ElasticExporter.ProcessIndex(settings)
