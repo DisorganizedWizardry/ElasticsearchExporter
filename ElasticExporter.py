@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from time import strftime
 from elasticsearch import Elasticsearch
 from datetime import datetime
-import json, os
+import json, csv, os
 import hashlib, gzip, shutil
 import base64
 import traceback
@@ -282,7 +282,9 @@ def ExportIndex(es, settings, TimeSeries, ExcludeField = False, AllItems = True,
         if os.path.exists( file_ndjson ):
           os.remove( file_ndjson )
         ProcessGroup(es, settings['index_name'], settings, group )
-  
+        if settings['export-csv']:
+          convertCSV(file_ndjson)
+
   #again for results with no group
   group = settings['FileNameOther']
   file_ndjson = settings['fullpath'] + '/' + group + '.ndjson'
@@ -292,7 +294,9 @@ def ExportIndex(es, settings, TimeSeries, ExcludeField = False, AllItems = True,
       print ("Removing file %s and re-exporting results" % file_ndjson) 
       os.remove( file_ndjson )
     ProcessGroup(es, settings['index_name'], settings, group, ExcludeField = ExcludeField, AllItems = AllItems )
-
+    if settings['export-csv']:
+      convertCSV(file_ndjson)
+  
 #export events for an index
 def ProcessIndex(settings, AllItems = True):
     es = settings['es']
@@ -321,7 +325,64 @@ def ProcessIndex(settings, AllItems = True):
     else:
       print ("Index does not exist : %s" % settings['index_name'] )
 
+#convertCSV functions for reading ndjson and writing csv
+#nested objects are converted to dotted notation
+# { "ip" : { "address" : "" }} 
+# to { "ip.address" : "" }
+def convertCSV_FlattenDict(item, baseName):
+  NewItem = {}
+  for item2 in item.keys():
+    if baseName != '': 
+      ItemKey = baseName + "." + item2
+    else:
+      ItemKey = item2
+    if isinstance(item[item2], dict):
+      NewItem.update( convertCSV_FlattenDict(item[item2], ItemKey) )
+    else:
+      NewItem[ItemKey] = repr(item[item2])
+  return NewItem
 
+def convertCSV_FlattenItem(item):
+  NewItem = {}
+  for item2 in item.keys():
+    if isinstance(item[item2], dict):
+      if item2 == '_source':
+        NewItem.update ( convertCSV_FlattenDict(item[item2], '') )
+      else:
+        NewItem.update ( convertCSV_FlattenDict(item[item2], item2) )
+    else:
+      NewItem[item2] = repr(item[item2])
+  return NewItem
+
+def convertCSV_WriteCSVFile(FileJSON, FileCSV, EventKeys):
+  with open(FileCSV, 'w', newline='')  as output_file:
+    dict_writer = csv.DictWriter(output_file, fieldnames=EventKeys)
+    dict_writer.writeheader()
+
+    #read the JSON file again and write csv file
+    with open(FileJSON, 'r') as f:
+      for line in f.readlines():
+        lineJSON = convertCSV_FlattenItem ( json.loads(line) )
+        dict_writer.writerow(lineJSON)
+
+#reads JSON file and finds all field names 
+#used for the first line of the csv file
+def convertCSV_ReadJSONFile(FileName):
+  EventKeys = []
+  with open(FileName, 'r') as f:
+    for line in f.readlines():
+      lineJSON = convertCSV_FlattenItem ( json.loads(line) )
+      for i in lineJSON.keys():
+        if i not in EventKeys:
+          EventKeys.append(i)
+  EventKeys.sort()
+  return EventKeys
+
+def convertCSV(FileJSON):
+  FileCSV  = FileJSON + '.csv'
+  print ("converting file %s to csv" % FileJSON)
+  EventKeys = convertCSV_ReadJSONFile(FileJSON)
+  convertCSV_WriteCSVFile(FileJSON, FileCSV, EventKeys)
 
 if __name__ == "__main__":
   print ("This is the ElasticExporter library - please use ElasticExporterCLI.py instead")
