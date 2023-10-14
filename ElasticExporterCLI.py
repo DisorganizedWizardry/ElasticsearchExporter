@@ -2,7 +2,7 @@
 Download an elasticsearch index to ndjson using a PIT search
 
 Usage:
-  ElasticExportCLI.py --index=<indexname> --backup-folder=<backup_folder> [--query-file=<query-file>]
+  ElasticExportCLI.py --index=<indexname> --backup-folder=<backup_folder> [--query-file=<query-file>] [--export-csv]
 """
 
 from elasticsearch import Elasticsearch
@@ -47,7 +47,11 @@ def main():
   #folder to save exported ndjson files
   if options.get('--backup-folder'):
     settings['backup_folder'] = options['--backup-folder']
-
+    
+  if options.get('--export-csv'):
+    settings['export-csv'] = True
+  else:
+    settings['export-csv'] = False
 
   if settings.get('debug'):
     print (settings)
