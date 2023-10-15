@@ -4,7 +4,7 @@ Download an elasticsearch index to ndjson using a PIT search
 Usage:
   ElasticExportCLI.py --index=<indexname> [--multiple-indexes] [--backup-folder=<backup_folder>] [--query-file=<query_file>] [--export-csv]
 
--Options:
+Options:
   --index=<indexname>  Set the index to export
   --multiple-indexes   Export multiple indexes at once. use a wildcard for --index=
                        e.g. --index=logstash*
