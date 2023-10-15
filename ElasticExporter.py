@@ -390,7 +390,7 @@ def ProcessMultipleIndexes(settings):
   print ("Selected %s indices to export" % len(res.keys()))
   for index_name in res.keys():
     countItems = settings['es'].count( index = index_name )
-    print ("Found index %s contains %s documents" % ( index_name, f'{countItems["count"]:,}' ))
+    print ("Found index %s which contains %s documents" % ( index_name, f'{countItems["count"]:,}' ))
 
   for index_name in res.keys():
     settings['index_name'] = index_name
