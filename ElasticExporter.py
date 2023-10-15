@@ -321,7 +321,7 @@ def ProcessIndex(settings, AllItems = True):
           print ("Export failed in ProcessIndex")
           traceback.print_exc()
       else:
-        print ("found an all.checksums file, skipping this folder")
+        print ("found an all.checksums file, skipping folder %s" % settings['fullpath'] )
     else:
       print ("Index does not exist : %s" % settings['index_name'] )
 
@@ -383,6 +383,18 @@ def convertCSV(FileJSON):
   print ("converting file %s to csv" % FileJSON)
   EventKeys = convertCSV_ReadJSONFile(FileJSON)
   convertCSV_WriteCSVFile(FileJSON, FileCSV, EventKeys)
+
+def ProcessMultipleIndexes(settings):
+  res = settings['es'].indices.get(index=settings['index_name'])
+  #print list of indexes to be exported
+  print ("Selected %s indices to export" % len(res.keys()))
+  for index_name in res.keys():
+    countItems = settings['es'].count( index = index_name )
+    print ("Found index %s contains %s documents" % ( index_name, f'{countItems["count"]:,}' ))
+
+  for index_name in res.keys():
+    settings['index_name'] = index_name
+    ProcessIndex(settings)
 
 if __name__ == "__main__":
   print ("This is the ElasticExporter library - please use ElasticExporterCLI.py instead")
