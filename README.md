@@ -40,6 +40,19 @@ This command would then export the index *filebeat-8.8.2* to the folder *exporte
 
 > python3 ElasticExporterCLI.py --index=filebeat-8.8.2 --backup-folder=exported
 
+# Options
+
+```
+--index=<indexname>  Set the index to export
+--multiple-indexes   Export multiple indexes at once. use a wildcard for --index=
+                     e.g. --index=logstash*
+--backup-folder=<backup_folder>
+                     Sets the folder to save the export to
+--query-file=<query_file>
+                     Sets a query filter to limit what is exported
+--export-csv         Also convert the json file to csv.
+```
+
 # Documentation
 
 * [Medium guide - How to Export an Entire elasticsearch Index to a File](https://medium.com/@disorganizedwizardry/how-to-export-an-entire-elasticsearch-index-to-a-file-37667a8803a0)
