@@ -142,7 +142,7 @@ def SearchGroup(es, index_name, settings, field_filter, TotalExported = 0, Exclu
     PITKeepAlive = '1m'
     results = dict( es.open_point_in_time(index=index_name, keep_alive=PITKeepAlive))
     #print ("open point in time : %s" % results)
-    search_q['pit'] = results
+    search_q['pit'] = { 'id' : results['id'] }
 
     SortOrder = { settings['timestamp'] : { "order": "asc", "format": "strict_date_optional_time_nanos" } }
     results = es.search( query=search_q['query'], pit=search_q['pit'], size=10000, sort=SortOrder, rest_total_hits_as_int=True)
